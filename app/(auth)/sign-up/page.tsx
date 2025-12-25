@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import React from 'react'
 import {useForm} from "react-hook-form";
 import {Button} from "@/components/ui/button";
@@ -6,8 +7,12 @@ import InputField from "@/components/forms/InputField";
 import SelectField from "@/components/forms/SelectField";
 import {INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS} from "@/lib/constants";
 import FooterLink from "@/components/forms/FooterLink";
+import {signUpWithEmail} from "@/lib/actions/authActions";
+import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 const SignUp = () => {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -58,7 +63,7 @@ const SignUp = () => {
                     placeholder="Johndoe@email.com"
                     register={register}
                     error={errors.email}
-                    validation={{ required: 'Email is required', pattern: /^\w+@\w+\.w+$/, message: 'Email address is required' }}
+                    validation={{ required: 'Email is required', pattern: /^\S+@\S+\.\S+$/, message: 'Email address is required' }}
                 />
 
                 <InputField
