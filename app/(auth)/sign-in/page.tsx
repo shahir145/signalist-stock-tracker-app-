@@ -1,11 +1,16 @@
-'use client'
+'use client';
+
 import React from 'react'
 import {useForm} from "react-hook-form";
 import InputField from "@/components/forms/InputField";
 import {Button} from "@/components/ui/button";
 import FooterLink from "@/components/forms/FooterLink";
+import {signInWithEmail} from "@/lib/actions/authActions";
+import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 const SignIn = () => {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -18,14 +23,14 @@ const SignIn = () => {
         mode: 'onBlur'
     }, );
 
-    const onSubmit = async (data: SignUpFormData) => {
+    const onSubmit = async (data: SignInFormData) => {
         try {
-            const result = await signUpWithEmail(data);
+            const result = await signInWithEmail(data);
             if(result.success) router.push('/');
         } catch (e) {
             console.error(e);
-            toast.error('Sign up failed', {
-                description: e instanceof Error ? e.message : 'Failed to create an account.'
+            toast.error('Sign in failed', {
+                description: e instanceof Error ? e.message : 'Failed to sign in.'
             })
         }
     }
@@ -41,7 +46,7 @@ const SignIn = () => {
                     placeholder="Johndoe@email.com"
                     register={register}
                     error={errors.email}
-                    validation={{ required: 'Email is required', pattern: /^\w+@\w+\.w+$/, message: 'Email address is required' }}
+                    validation={{ required: 'Email is required', pattern: /^\S+@\S+\.\S+$/, message: 'Email address is required' }}
                 />
 
                 <InputField
@@ -53,7 +58,6 @@ const SignIn = () => {
                     error={errors.password}
                     validation={{ required: 'Password is required', minLength: 8 }}
                 />
-
 
                 <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
                     {isSubmitting ? 'Logging In' : 'Log In'}
